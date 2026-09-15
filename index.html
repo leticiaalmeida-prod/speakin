@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="speakin, a VR app for practicing spoken English. Leticia Almeida, FAU-USP design thesis, 2019.">
+<title>speakin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root {
+    --ground: #fafafb;
+    --ink: #16161d;
+    --muted: #5b5b6b;
+    --rule: #e4e3ea;
+    --accent: #e5177b;
+    --understood: #2b3a8c;
+    --frame: #ececf1;
+    --display: "Bricolage Grotesque", "Helvetica Neue", Arial, sans-serif;
+    --body: "Source Sans 3", "Source Sans Pro", "Helvetica Neue", Arial, sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #121218;
+      --ink: #ededf2;
+      --muted: #a0a0b0;
+      --rule: #2a2a34;
+      --accent: #ff4d9d;
+      --understood: #8b98ff;
+      --frame: #1c1c24;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground: #121218;
+    --ink: #ededf2;
+    --muted: #a0a0b0;
+    --rule: #2a2a34;
+    --accent: #ff4d9d;
+    --understood: #8b98ff;
+    --frame: #1c1c24;
+  }
+
+  body {
+    background: var(--ground);
+    color: var(--ink);
+    font: 400 1.125rem/1.6 var(--body);
+    padding-inline: 20px;
+    padding-block: 0 72px;
+  }
+  .wrap { max-width: 960px; margin: 0 auto; }
+  .text { max-width: 640px; }
+
+  header { padding-block: 72px 40px; display: grid; gap: 18px; }
+  .eyebrow {
+    font: 500 0.75rem/1.4 var(--mono);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  h1 {
+    font: 800 clamp(3.5rem, 12vw, 7.5rem)/0.9 var(--display);
+    letter-spacing: -0.04em;
+    margin: 0;
+  }
+  h1 .in { color: var(--accent); }
+  .lede { font-size: 1.375rem; line-height: 1.45; margin: 0; text-wrap: balance; }
+  .byline { color: var(--muted); font-size: 1rem; margin: 0; }
+  .watch {
+    justify-self: start;
+    font: 600 1rem/1 var(--body);
+    color: var(--accent);
+    text-decoration: none;
+    border: 1.5px solid var(--accent);
+    border-radius: 999px;
+    padding: 11px 18px;
+  }
+  .watch:hover { background: var(--accent); color: var(--ground); }
+  .watch:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+
+  figure { margin: 0; display: grid; gap: 10px; }
+  figure img {
+    display: block; width: 100%; max-width: 100%; height: auto;
+    border-radius: 6px; background: var(--frame);
+  }
+  figcaption { font: 400 0.8125rem/1.45 var(--mono); color: var(--muted); }
+
+  section { padding-block: 56px 0; display: grid; gap: 22px; }
+  h2 {
+    font: 600 1.75rem/1.15 var(--display);
+    letter-spacing: -0.015em;
+    margin: 0;
+    text-wrap: balance;
+  }
+  p { margin: 0; }
+  .stack { display: grid; gap: 14px; }
+
+  .facts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 1px;
+    background: var(--rule);
+    border-block: 1px solid var(--rule);
+    margin: 0;
+  }
+  .facts div { background: var(--ground); padding: 16px 14px 18px 0; display: grid; gap: 4px; align-content: start; }
+  .facts dt { font: 800 2rem/1 var(--display); font-variant-numeric: tabular-nums; }
+  .facts dd { margin: 0; color: var(--muted); font-size: 0.9375rem; line-height: 1.35; }
+
+  blockquote {
+    margin: 0;
+    padding-left: 18px;
+    border-left: 3px solid var(--accent);
+    font: 600 1.375rem/1.35 var(--display);
+    text-wrap: balance;
+  }
+  blockquote cite { display: block; margin-top: 10px; font: 400 0.875rem/1.4 var(--body); color: var(--muted); font-style: normal; }
+
+  .cycle { display: grid; grid-template-columns: 5rem 1fr; gap: 0 18px; padding-block: 28px; border-top: 1px solid var(--rule); }
+  .cycle .n { font: 500 0.875rem/2.2 var(--mono); color: var(--accent); white-space: nowrap; }
+  .cycle .body { display: grid; gap: 14px; }
+  .cycle h3 { font: 600 1.25rem/1.25 var(--display); margin: 0; }
+  .learned { color: var(--muted); }
+  .learned strong { color: var(--ink); font-weight: 600; }
+  .pair { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+  .state { font-weight: 600; }
+  .state.miss { color: var(--accent); }
+  .state.hit { color: var(--understood); }
+
+  footer { margin-top: 56px; padding-top: 22px; border-top: 1px solid var(--rule); color: var(--muted); font-size: 0.9375rem; }
+
+  @media (max-width: 560px) {
+    .cycle { grid-template-columns: 1fr; }
+    .cycle .n { line-height: 1.4; margin-bottom: 6px; }
+  }
+</style>
+</head>
+<body>
+
+<main class="wrap">
+  <header>
+    <span class="eyebrow">Design thesis · FAU-USP · 2019 · 147 pages</span>
+    <h1>speak<span class="in">in</span></h1>
+    <p class="lede text">A virtual reality app for practicing spoken English inside scenes that feel real. I spent a year researching, designing, filming and testing it for my design degree at the University of São Paulo.</p>
+    <p class="byline">Leticia Almeida · advised by Prof. Dr. André Leme Fleury</p>
+    <a class="watch" href="https://www.youtube.com/playlist?list=PLN-HMQfu8x7o" target="_blank" rel="noopener">Watch the prototype videos on YouTube <span aria-hidden="true">↗</span></a>
+  </header>
+
+  <figure>
+    <img src="breakfast-panel.jpg" alt="360 degree breakfast scene with a floating panel titled What you can say, offering I'm good, I'm great and I'm awesome, with a Portuguese translation under the selected answer" width="1000" height="600">
+    <figcaption>Cycle 2. The scene pauses and offers answers you can say out loud, with a translation under the one you pick.</figcaption>
+  </figure>
+
+  <section class="text">
+    <h2>People study English for years and still can't hold a conversation</h2>
+    <div class="stack">
+      <p>In 2013 only 5.1% of Brazilians over 16 said they had any knowledge of English (British Council). The ones who pay for a language school often leave with grammar and no confidence to speak.</p>
+      <p>I wanted to know why, from the learners' side, before deciding what to build.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="text">What I did before designing anything</h2>
+    <dl class="facts">
+      <div><dt>2</dt><dd>language schools, sitting in on classes</dd></div>
+      <div><dt>6 h</dt><dd>of one-to-one lessons on italki</dd></div>
+      <div><dt>2</dt><dd>English Munchers conversation meetups</dd></div>
+      <div><dt>10</dt><dd>interviews, 8 students and 2 teachers</dd></div>
+      <div><dt>2 wk</dt><dd>watching one learner do his homework</dd></div>
+    </dl>
+    <blockquote class="text">
+      "When I'm practicing a conversation in class, it never feels real. I never leave the room."
+      <cite>Ernani, the learner I observed. Today he's my cofounder at Gecko.</cite>
+    </blockquote>
+    <p class="text">Two things came up again and again. Practice never felt like a real situation, and people were afraid of being judged while they got it wrong. So the brief became a place to rehearse everyday conversations privately, with feedback on whether you were understood.</p>
+  </section>
+
+  <section>
+    <h2 class="text">Four prototype cycles, each testing one question</h2>
+
+    <div class="cycle">
+      <span class="n">Cycle 1</span>
+      <div class="body">
+        <h3>Can a 360° video make you feel you're in the room?</h3>
+        <figure>
+          <img src="office.jpg" alt="360 degree office scene with an actor seated at a desk facing the camera" width="1000" height="588">
+          <figcaption>Office scene, filmed on a Xiaomi Mi Sphere at eye height and watched on Google Cardboard.</figcaption>
+        </figure>
+        <p class="learned"><strong>Learned:</strong> the camera sat too close to the actor, and my fix for its height left a smudge in the footage that broke the immersion. Viewers still asked to see more.</p>
+      </div>
+    </div>
+
+    <div class="cycle">
+      <span class="n">Cycle 2</span>
+      <div class="body">
+        <h3>How do words live inside a scene?</h3>
+        <figure>
+          <img src="breakfast-prompt.jpg" alt="Breakfast scene where a speech bubble next to the host asks Hey, Mornin'! How is it going?" width="1000" height="602">
+          <figcaption>A breakfast dialogue. The host asks, then waits for you.</figcaption>
+        </figure>
+        <p class="learned"><strong>Learned:</strong> VR can't hold long text. I resized the panels many times, and dialogues had to get shorter to stay readable.</p>
+      </div>
+    </div>
+
+    <div class="cycle">
+      <span class="n">Cycle 3</span>
+      <div class="body">
+        <h3>Does the whole flow work, filmed in a real bar?</h3>
+        <div class="pair">
+          <figure>
+            <img src="bar-miss.jpg" alt="Bar scene with answer panels and a magenta microphone button" width="1000" height="530">
+            <figcaption><span class="state miss">Not understood.</span> The mic turns magenta and the scene waits.</figcaption>
+          </figure>
+          <figure>
+            <img src="bar-hit.jpg" alt="The same bar scene with a blue microphone button" width="1000" height="523">
+            <figcaption><span class="state hit">Understood.</span> The mic turns blue and the scene moves on.</figcaption>
+          </figure>
+        </div>
+        <p>You pick a level and a place, order a drink by speaking, and finish with a score and one thing to improve.</p>
+        <p class="learned"><strong>Learned:</strong> planning the flow frame by frame worked. The footage didn't: low light and bar noise ruined it. Next time the dialogue gets its own audio channel.</p>
+      </div>
+    </div>
+
+    <div class="cycle">
+      <span class="n">Cycle 4</span>
+      <div class="body">
+        <h3>Can a machine decide whether you were understood?</h3>
+        <p>With a developer, I tested a speech path through Cortana, Microsoft LUIS and a question-and-answer knowledge base, which judges whether an answer counts before the scene moves on. It held up in a simple test, and I ran more headset sessions with users.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="text">
+    <h2>What I took from it</h2>
+    <p>Users asked for more scenes after every cycle. The weak points were footage quality and legibility on a phone held 5 cm from the eyes, and the thesis ends by saying it still needed a real build and a business model. The idea I kept: the scene doesn't move on until the answer has been checked.</p>
+  </section>
+
+  <footer class="text">Frames and figures are from the thesis, "speakin: aplicativo de realidade virtual para auxiliar na prática de conversação em inglês", FAU-USP, 2019.</footer>
+</main>
+</body>
+</html>
